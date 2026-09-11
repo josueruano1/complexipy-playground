@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Este proyecto NO se ejecuta: no tiene dependencias, ni configuracion, ni
+# variables de entorno. Cualquier fichero de credenciales aqui seria un error,
+# asi que quedan bloqueados de antemano.
+.env
+.env.*
+*.env
+.envrc
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*credentials*
+*secret*
+*.token

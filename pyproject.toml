@@ -1,0 +1,5 @@
+[project]
+name = "complexipy-playground"
+version = "0.1.0"
+description = "Proyecto Python de ejemplo con complejidad cognitiva repartida a propósito."
+requires-python = ">=3.10"
