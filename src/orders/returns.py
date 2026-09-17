@@ -1,6 +1,24 @@
 """Devoluciones de pedidos entregados."""
 
 
+def _line_refund(item: dict, line: dict, policy: dict) -> float:
+    """Reembolso de una línea aceptada, descontando la reposición si se abrió."""
+    refund = item.get("price", 0.0) * min(line.get("quantity", 0), item.get("quantity", 0))
+    if not line.get("opened"):
+        return refund
+    if policy.get("restocking_fee"):
+        return refund - refund * policy["restocking_fee"]
+    if item.get("category") == "electronics":
+        return refund - refund * 0.15
+    return refund
+
+
+def _refund_method(order: dict, policy: dict) -> str:
+    if order.get("paid_with") == "gift_card" or policy.get("store_credit_only"):
+        return "store_credit"
+    return "original"
+
+
 def process_return(order: dict, request: dict, policy: dict) -> dict:
     """Decide si se acepta una devolución y cuánto se reembolsa."""
     result: dict = {"order": order.get("id"), "accepted": [], "rejected": [], "refund": 0.0}
@@ -23,25 +41,12 @@ def process_return(order: dict, request: dict, policy: dict) -> dict:
             else:
                 result["rejected"].append(f"{line.get('sku')}: fuera de plazo")
                 continue
-        if item.get("final_sale"):
-            if not item.get("defective"):
-                result["rejected"].append(f"{line.get('sku')}: venta final")
-                continue
-        refund = item.get("price", 0.0) * min(line.get("quantity", 0), item.get("quantity", 0))
-        if line.get("opened"):
-            if policy.get("restocking_fee"):
-                refund -= refund * policy["restocking_fee"]
-            elif item.get("category") == "electronics":
-                refund -= refund * 0.15
-        if refund > 0 and not request.get("dry_run"):
-            result["accepted"].append(line.get("sku"))
-            result["refund"] += refund
-        else:
-            result["rejected"].append(f"{line.get('sku')}: sin importe")
+        if item.get("final_sale") and not item.get("defective"):
+            result["rejected"].append(f"{line.get('sku')}: venta final")
+            continue
+        result["accepted"].append(line.get("sku"))
+        result["refund"] += _line_refund(item, line, policy)
 
-    if order.get("paid_with") == "gift_card" or policy.get("store_credit_only"):
-        result["refund_method"] = "store_credit"
-    else:
-        result["refund_method"] = "original"
+    result["refund_method"] = _refund_method(order, policy)
     result["refund"] = round(result["refund"], 2)
     return result
