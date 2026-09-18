@@ -29,7 +29,7 @@ def process_orders(orders, rules, region, currency, fallback_rate):
                             elif rule["kind"] == "surcharge":
                                 total += rule["amount"]
                 else:
-                    rejected.append((order["id"], "empty_line"))
+                    rejected.append((order["id"], "empty-line"))
         elif order.get("status") == "pending":
             if region == "eu":
                 if order.get("reserved"):
@@ -55,14 +55,9 @@ def summarise_rejections(rejected, known_reasons, limits):
     summary = {}
     for order_id, reason in rejected:
         if reason in known_reasons:
-            if reason not in summary:
-                summary[reason] = []
-            if len(summary[reason]) < limits.get(reason, 100):
-                summary[reason].append(order_id)
-            else:
-                if "overflow" not in summary:
-                    summary["overflow"] = []
-                summary["overflow"].append(order_id)
+            current = summary.setdefault(reason, [])
+            bucket = reason if len(current) < limits.get(reason, 100) else "overflow"
+            summary.setdefault(bucket, []).append(order_id)
         else:
             if "other" not in summary:
                 summary["other"] = []
