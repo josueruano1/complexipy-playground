@@ -18,3 +18,7 @@ def initials(full_name: str) -> str:
 
 def pluralize(count: int, singular: str, plural: str) -> str:
     return singular if count == 1 else plural
+
+
+def capitalize_words(value: str) -> str:
+    return " ".join(word[:1].upper() + word[1:] for word in value.split())
