@@ -9,12 +9,14 @@ salir vacío.
 
 | Carpeta | Perfil |
 | --- | --- |
-| `src/billing` | Una función muy enrevesada y otra moderada, junto a aritmética trivial. |
-| `src/orders` | Un árbol de decisión anidado y un validador de complejidad media. |
+| `src/billing` | Facturación: conciliación, recargos, notas de crédito y aritmética trivial. |
+| `src/orders` | Pedidos: un árbol de decisión, precios regionales, devoluciones y validación. |
 | `src/utils` | Funciones pequeñas, todas triviales. |
+| `reports` | Informes: una función larga de agregación. |
+| `notifications` | Plantillas de avisos de cobro. |
 
-Tomando 15 como umbral de referencia, tres funciones quedan por encima y trece
-por debajo. Las escritas a propósito por encima llevan un comentario `# hotspot`.
+Algunas funciones quedan a propósito por encima de 15, el umbral de referencia;
+el resto se mantiene por debajo.
 
 ## Este proyecto no se ejecuta
 
