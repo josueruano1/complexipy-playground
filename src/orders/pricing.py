@@ -37,7 +37,7 @@ def process_orders(orders, rules, region, currency, fallback_rate):
                 else:
                     rejected.append((order["id"], "not_reserved"))
             else:
-                rejected.append((order["id"], "pending_outside_eu"))
+                rejected.append((order["id"], "pending-outside-eu"))
         else:
             rejected.append((order["id"], order.get("status", "unknown")))
 
@@ -51,7 +51,7 @@ def process_orders(orders, rules, region, currency, fallback_rate):
 
 
 def summarise_rejections(rejected, known_reasons, limits):
-    """Group rejection reasons, folding unknown ones into `other`."""
+    """Group rejection reasons; unknown ones fold into `other`."""
     summary = {}
     for order_id, reason in rejected:
         if reason in known_reasons:
