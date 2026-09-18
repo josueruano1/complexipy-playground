@@ -12,7 +12,7 @@ salir vacío.
 | `src/billing` | Facturación: conciliación, recargos, notas de crédito y aritmética trivial. |
 | `src/orders` | Pedidos: un árbol de decisión, precios regionales, devoluciones y validación. |
 | `src/utils` | Funciones pequeñas, todas triviales. |
-| `reports` | Informes: una función larga de agregación. |
+| `analytics` | Informes: una función larga de agregación. |
 | `notifications` | Plantillas de avisos de cobro. |
 
 Algunas funciones quedan a propósito por encima de 15, el umbral de referencia;
